@@ -16,8 +16,11 @@ class HomeRepositoryImpl implements HomeRepositorory {
     try {
       final data = await _homeDatasourceImpl.fetchProducts("/products");
 
-      final ProductsModel productsModel = ProductsModel.fromMap(data);
+      if (data == null) {
+        throw Exception("Ma'lumotlar null");
+      }
 
+      final ProductsModel productsModel = ProductsModel.fromMap(data);
       return productsModel;
     } catch (e) {
       log("ERORR: HomeRepositoryImp.fetchProducts() $e");
@@ -29,11 +32,14 @@ class HomeRepositoryImpl implements HomeRepositorory {
   Future<ProductsModel> fetchProductsDiscount() async {
     try {
       final data = await _homeDatasourceImpl.fetchProducts(
-        "/products-diccount",
+        "/products-discount",
       );
 
-      final ProductsModel productsModel = ProductsModel.fromMap(data);
+      if (data == null) {
+        throw Exception("Chegirmali mahsulotlar ma'lumotlari null");
+      }
 
+      final ProductsModel productsModel = ProductsModel.fromMap(data);
       return productsModel;
     } catch (e) {
       log("ERORR: HomeRepositoryImp.fetchProductsDiscount() $e");
@@ -46,8 +52,11 @@ class HomeRepositoryImpl implements HomeRepositorory {
     try {
       final data = await _homeDatasourceImpl.fetchProducts("/products-hit");
 
-      final ProductsModel productsModel = ProductsModel.fromMap(data);
+      if (data == null) {
+        throw Exception("Hit mahsulotlar ma'lumotlari null");
+      }
 
+      final ProductsModel productsModel = ProductsModel.fromMap(data);
       return productsModel;
     } catch (e) {
       log("ERORR: HomeRepositoryImp.fetchProductsHit() $e");
@@ -60,8 +69,10 @@ class HomeRepositoryImpl implements HomeRepositorory {
     try {
       final data = await _homeDatasourceImpl.fetchProducts("/products-new");
 
+      if (data == null) {
+        throw Exception("Yangi mahsulotlar ma'lumotlari null");
+      }
       final ProductsModel productsModel = ProductsModel.fromMap(data);
-
       return productsModel;
     } catch (e) {
       log("ERORR: HomeRepositoryImp.fetchProductsNew() $e");
@@ -72,10 +83,13 @@ class HomeRepositoryImpl implements HomeRepositorory {
   @override
   Future<ProductsModel> fetchShowProducts() async {
     try {
-      final data = await _homeDatasourceImpl.fetchProducts("/show-products");
+      final data = await _homeDatasourceImpl.fetchProducts("/products-show");
+
+      if (data == null) {
+        throw Exception("Show mahsulotlar ma'lumotlari null");
+      }
 
       final ProductsModel productsModel = ProductsModel.fromMap(data);
-
       return productsModel;
     } catch (e) {
       log("ERORR: HomeRepositoryImp.fetchShowProducts() $e");
@@ -88,11 +102,14 @@ class HomeRepositoryImpl implements HomeRepositorory {
     try {
       final data = await _homeDatasourceImpl.fetchProducts("/products/$id");
 
-      final ProductModel productsModel = ProductModel.fromMap(data);
+      if (data == null) {
+        throw Exception("Mahsulot ma'lumotlari null");
+      }
 
+      final ProductModel productsModel = ProductModel.fromMap(data);
       return productsModel;
     } catch (e) {
-      log("ERORR: HomeRepositoryImp.fetchShowProducts() $e");
+      log("ERORR: HomeRepositoryImp.getProductById() $e");
       throw Exception(e);
     }
   }

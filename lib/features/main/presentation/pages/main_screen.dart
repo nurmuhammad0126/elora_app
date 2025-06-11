@@ -1,5 +1,6 @@
 import 'package:eloro_app_for_home_work/core/extensions/context_extension.dart';
 import 'package:eloro_app_for_home_work/core/extensions/size_extension.dart';
+import 'package:eloro_app_for_home_work/features/cart/presentation/page/cart_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../home/presentation/pages/home_screen.dart';
@@ -17,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _pages = [
     HomeScreen(),
     Container(color: Colors.amber),
-    Container(color: Colors.blue),
+    CartScreen(),
     Container(color: Colors.red),
     Container(color: Colors.blueGrey),
   ];
@@ -40,10 +41,19 @@ class _MainScreenState extends State<MainScreen> {
 
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: context.colors.grey200,
+            unselectedItemColor: context.colors.grey400,
+
+            selectedLabelStyle: context.styles.s14w500,
+            showUnselectedLabels: true,
+            selectedItemColor: context.colors.textPrimary.withAlpha(200),
+          ),
           splashColor: context.colors.primary.withAlpha(60),
           highlightColor: Colors.transparent,
-          splashFactory: InkRipple.splashFactory,
+          // splashFactory: InkRipple.splashFactory,
         ),
+
         child: BottomNavigationBar(
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
@@ -52,10 +62,6 @@ class _MainScreenState extends State<MainScreen> {
             color: context.colors.textPrimary.withAlpha(200),
             size: 30.o,
           ),
-          selectedLabelStyle: context.styles.s14w500,
-          showUnselectedLabels: true,
-          selectedItemColor: context.colors.textPrimary.withAlpha(200),
-          unselectedItemColor: context.colors.grey,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),

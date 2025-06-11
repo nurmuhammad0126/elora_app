@@ -4,13 +4,14 @@ import 'package:dio/dio.dart';
 
 class DioClient {
   final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: 'api.elaro.uz/api',
-      connectTimeout: const Duration(seconds: 60),
-      receiveTimeout: const Duration(seconds: 60),
-      headers: {'Content-Type': 'application/json'},
-    ),
-  )..interceptors.add(
+      BaseOptions(
+        baseUrl: 'http://api.elaro.uz/api',
+        connectTimeout: const Duration(seconds: 60),
+        receiveTimeout: const Duration(seconds: 60),
+        headers: {'Content-Type': 'application/json'},
+      ),
+    )
+    ..interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
           log("METHOD TYPE: ${options.method}");
@@ -21,7 +22,9 @@ class DioClient {
 
         onResponse: (response, handler) {
           log("RESPONSE STATUS CODE: ${response.statusCode}");
-          log("RESPONSE DATA: ${response.data}");
+          // log("RESPONSE DATA: ${response.data}");
+          log("RESPONSE path: ${response.headers}");
+
           return handler.next(response);
         },
         onError: (e, handler) {

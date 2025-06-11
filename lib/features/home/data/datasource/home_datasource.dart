@@ -1,27 +1,57 @@
 import 'dart:developer';
+import 'package:dio/dio.dart';
 
 import '../../../../core/dio/dio_client.dart';
 
-abstract class HomeDatasource {
-  Future<Map> fetchProducts(String url);
-}
+class HomeDatasourceImpl {
+  final DioClient dioClient;
 
-class HomeDatasourceImpl implements HomeDatasource {
-  final DioClient _dioClient;
+  HomeDatasourceImpl({required this.dioClient});
 
-  HomeDatasourceImpl({required DioClient dioClient}) : _dioClient = dioClient;
-
-  @override
-  Future<Map<String,dynamic>> fetchProducts(String url) async {
+  Future<Map<String, dynamic>?> fetchProducts(String endpoint) async {
     try {
-      final res = await _dioClient.get(url);
+      log("METHOD TYPE: GET");
+      log("METHOD TYPE: $endpoint");
+      log("REQUEST BODY: null");
 
-      final Map<String, dynamic> data = res.data;
+      final response = await dioClient.get(endpoint);
 
-      return data;
-    } catch (e) {
+      log("RESPONSE STATUS CODE: ${response.statusCode}");
+      log("RESPONSE DATA: ${response.data}");
+
+      if (response.statusCode == 200) {
+        if (response.data == null) {
+          log("WARNING: Response data is null for $endpoint");
+          return null;
+        }
+
+        if (response.data is Map<String, dynamic>) {
+          return response.data;
+        } else {
+          log(
+            "WARNING: Response data is not Map<String, dynamic> for $endpoint",
+          );
+          return null;
+        }
+      } else {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          message: 'HTTP ${response.statusCode}',
+        );
+      }
+    } on DioException catch (e) {
+      log("On Error: $e");
       log("ERORR: HomeDatasourceImpl.fetchProducts() => $e");
-      throw Exception(e);
+
+      if (e.response?.statusCode == 404) {
+        throw Exception("Endpoint topilmadi: $endpoint");
+      }
+
+      rethrow;
+    } catch (e) {
+      log("Unexpected error in HomeDatasourceImpl.fetchProducts(): $e");
+      throw Exception("Kutilmagan xatolik: $e");
     }
   }
 }
